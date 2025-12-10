@@ -1,27 +1,69 @@
-version: "3.0"
-
+version: "3.1"
 intents:
   - greet
   - goodbye
-  - ask_medicine
-  - ask_food
-  - inform_tired
+  - thank_you
+  - symptoms
+  - ask_risk
+  - lab_value_explanation
+  - lifestyle_advice
+  - emergency
+  - feedback
+
+entities:
+  - number
+  - date
+  - medicine
+
+slots:
+  hba1c:
+    type: float
+    mappings:
+      - type: from_entity
+        entity: number
+      - type: from_text
+  fasting_glucose:
+    type: float
+    mappings:
+      - type: from_entity
+        entity: number
+      - type: from_text
+  egfr:
+    type: float
+    mappings:
+      - type: from_entity
+        entity: number
+      - type: from_text
+  appointment_date:
+    type: text
+    mappings:
+      - type: from_entity
+        entity: date
+      - type: from_text
 
 responses:
   utter_greet:
-    - text: "හෙලෝ! ඔබට කෙසේද?"
+    - text: "ආයුබෝවන්! ඔබගේ රෝග ලක්ෂණ හෝ රිපෝට් විස්තර මට කියන්න."
+  utter_ask_feedback:
+    - text: "ඔබගේ ප්‍රතිචාර මොනවාද?"
+  utter_confirm_feedback_received:
+    - text: "ඔබගේ ප්‍රතිචාර ලැබුණා, ස්තූතියි!"
+  utter_thanks:
+    - text: "ඔබට ස්තූතියි!"
   utter_goodbye:
-    - text: "සමාවන්න, එහෙම නැවත බලමු."
-  utter_medicine:
-    - text: "ඔබට දිනකට දෙවරක් මිනිත්තු 30 කට පෙර ඖෂධ ගන්න."
-  utter_food:
-    - text: "ඔබ මසුරූම් සහ සීනි අඩු කරන්න."
-  utter_tired:
-    - text: "ඔබ විවේකය ගන්න; හොඳ නින්දක් උදෙසා වෙහෙස සමහර විට පසුබිම් විය හැක." 
+    - text: "සුභ දවසක්! සෞඛ්‍යවන්තව සිටින්න."
+  utter_emergency:
+    - text: "මෙය හදිසි අවස්ථාවක්ද? කරුණාකර වහාම 1990 අම්බුලන්ස් සේවායි අමතන්න හෝ ආසන්නතම රෝහලට යන්න."
 
-entities: []
-slots: {}
+actions:
+  - action_submit_feedback
+  - action_get_risk
+  - medical_form
 
-session_config:
-  session_expiration_time: 60
-  carry_over_slots_to_new_session: true
+forms:
+  medical_form:
+    required_slots:
+      - hba1c
+      - fasting_glucose
+      - egfr
+      - appointment_date
