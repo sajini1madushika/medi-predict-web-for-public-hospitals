@@ -1,0 +1,63 @@
+version: "3.8"
+
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    env_file:
+      - ./backend/.env
+    environment:
+      - PYTHONUNBUFFERED=1
+      - RASA_REST_URL=${RASA_REST_URL:-http://chatbot:5005/webhooks/rest/webhook}
+      - CORS_ORIGINS=${CORS_ORIGINS:-http://localhost:4173}
+    ports:
+      - "8000:8000"
+    volumes:
+      # Persist ML models and logs outside the container
+      - ./backend/backend_fastapi/ml/models:/app/backend_fastapi/ml/models
+      - ./backend/backend_fastapi/logs:/app/backend_fastapi/logs
+    depends_on:
+      - chatbot
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    env_file:
+      - ./frontend/.env
+    environment:
+      - VITE_API_BASE=${VITE_API_BASE:-http://backend:8000}
+    ports:
+      - "4173:4173"
+    depends_on:
+      - backend
+
+  chatbot:
+    image: rasa/rasa:3.6.20
+    working_dir: /app
+    volumes:
+      - ./chatbot:/app
+      - ./chatbot/models:/app/models
+      - ./chatbot/logs:/app/logs
+    command: >
+      bash -c "rasa train && rasa run --enable-api --cors '*' --port 5005 --endpoints endpoints.yml"
+    environment:
+      - RASA_TELEMETRY_ENABLED=0
+    ports:
+      - "5005:5005"
+    depends_on:
+      - actions
+
+  actions:
+    image: rasa/rasa-sdk:3.6.2
+    working_dir: /app
+    volumes:
+      - ./chatbot:/app
+      - ./chatbot/logs:/app/logs
+    command: >
+      bash -c "pip install -r requirements.txt 2>/dev/null || true; rasa run actions --port 5055"
+    environment:
+      - RASA_TELEMETRY_ENABLED=0
+    ports:
+      - "5055:5055"
