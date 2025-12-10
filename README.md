@@ -1,36 +1,21 @@
-# MediPredict-SL (Prototype)
+Android Patient App
 
-Bilingual (Sinhala + English) chronic disease health management prototype built with Next.js App Router, Tailwind CSS, and TypeScript. Uses mock data only.
+This is a scaffolded Android app (Kotlin) that connects to the FastAPI backend `/chat` endpoint.
 
-## Getting started
+Defaults
+- Base URL: http://10.0.2.2:8001/ (useful for Android emulator)
 
-1. Install dependencies:
+Features
+- Retrofit + Coroutines networking
+- Room DB to persist last chats
+- Hilt DI
+- ViewModel + StateFlow for UI
+- Basic UI scaffold (RecyclerView + input)
 
-```bash
-npm install
-```
+How to open
+1. Open `android_patient_app` in Android Studio.
+2. Build and run on Android emulator (API 24+).
 
-2. Run dev server:
-
-```bash
-npm run dev
-```
-
-3. Open routes:
-
-- http://localhost:3000/doctor
-- http://localhost:3000/doctor/P-1001
-- http://localhost:3000/pharmacist
-- http://localhost:3000/practice
-- http://localhost:3000/patient
-
-## Structure
-
-- `app/` – App Router pages and layout
-- `components/` – UI components
-- `lib/` – types and mock data
-
-## Notes
-
-- Charts: `recharts`
-- No backend; all data from `lib/mock.ts`
+Tests
+- Unit test for `ChatApi` using MockWebServer.
+- Placeholder UI test in androidTest for ChatActivity (Espresso to be added).
