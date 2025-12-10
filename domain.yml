@@ -1,0 +1,27 @@
+version: "3.0"
+
+intents:
+  - greet
+  - goodbye
+  - ask_medicine
+  - ask_food
+  - inform_tired
+
+responses:
+  utter_greet:
+    - text: "හෙලෝ! ඔබට කෙසේද?"
+  utter_goodbye:
+    - text: "සමාවන්න, එහෙම නැවත බලමු."
+  utter_medicine:
+    - text: "ඔබට දිනකට දෙවරක් මිනිත්තු 30 කට පෙර ඖෂධ ගන්න."
+  utter_food:
+    - text: "ඔබ මසුරූම් සහ සීනි අඩු කරන්න."
+  utter_tired:
+    - text: "ඔබ විවේකය ගන්න; හොඳ නින්දක් උදෙසා වෙහෙස සමහර විට පසුබිම් විය හැක." 
+
+entities: []
+slots: {}
+
+session_config:
+  session_expiration_time: 60
+  carry_over_slots_to_new_session: true
